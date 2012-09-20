@@ -20,6 +20,12 @@ module Data.Word8 (
   , _braketleft, _backslash, _bracketright, _circum, _underscore, _grave
   , _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z
   , _blaceleft, _bar, _braceright, _tilde, _del
+  -- * Some Latin-1 charactors
+  , _nbsp
+  , _ordfeminine, _softhyphen, _mu, _ordmasculine
+  , _s2, _s3, _s1, _1'4, _1'2, _3'4
+  , _Agrave, _Odieresis, _Oslash, _Thorn
+  , _germandbls, _agrave, _odieresis, _oslash, _thorn, _ydieresis
   ) where
 
 import Data.Word (Word8)
@@ -256,46 +262,30 @@ _del        = 0x7f
 _nbsp :: Word8
 _nbsp = 0xa0
 
-_ordfeminine  :: Word8
+_ordfeminine, _softhyphen, _mu, _ordmasculine :: Word8
 _ordfeminine  = 0xaa
-_softhyphen   :: Word8
 _softhyphen   = 0xad
-_mu           :: Word8
 _mu           = 0xb5
-_ordmasculine :: Word8
 _ordmasculine = 0xba
 
-_s2 :: Word8
+_s2, _s3, _s1, _1'4, _1'2, _3'4  :: Word8
 _s2 = 0xb2
-_s3 :: Word8
 _s3 = 0xb3
-_s1 :: Word8
 _s1 = 0xb9
-_1'4 :: Word8
 _1'4 = 0xbc
-_1'2 :: Word8
 _1'2 = 0xbd
-_3'4 :: Word8
 _3'4 = 0xbe
 
-_Agrave    :: Word8
+_Agrave, _Odieresis, _Oslash, _Thorn :: Word8
 _Agrave    = 0xc0
-_Odieresis :: Word8
 _Odieresis = 0xd6
-_Oslash    :: Word8
 _Oslash    = 0xd8
-_Thorn     :: Word8
 _Thorn     = 0xde
 
-_germandbls :: Word8
+_germandbls, _agrave, _odieresis, _oslash, _thorn, _ydieresis :: Word8
 _germandbls = 0xdf
-_agrave     :: Word8
 _agrave     = 0xe0
-_odieresis  :: Word8
 _odieresis  = 0xf6
-_oslash     :: Word8
 _oslash     = 0xf8
-_thorn      :: Word8
 _thorn      = 0xfe
-_ydieresis  :: Word8
 _ydieresis  = 0xff

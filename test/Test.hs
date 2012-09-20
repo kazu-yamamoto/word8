@@ -3,7 +3,6 @@
 module Test where
 
 import qualified Data.Char as C
-import Data.Word (Word8)
 import Data.Word8
 import Test.Framework.Providers.QuickCheck2
 import Test.Framework.TH.Prime
