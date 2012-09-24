@@ -84,6 +84,7 @@ prop_toTitle c
 
 ----------------------------------------------------------------
 
+_mu, _ydieresis :: Char
 _mu        = '\xb5'
 _ydieresis = '\xff'
 
