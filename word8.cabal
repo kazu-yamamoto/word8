@@ -1,5 +1,5 @@
 Name:                   word8
-Version:                0.0.0
+Version:                0.0.1
 Author:                 Kazu Yamamoto <kazu@iij.ad.jp>
 Maintainer:             Kazu Yamamoto <kazu@iij.ad.jp>
 License:                BSD3
@@ -12,7 +12,8 @@ Build-Type:             Simple
 
 Library
   GHC-Options:          -Wall
-  Exposed-Modules:      Data.Word8
+  Exposed-Modules:      Data.Char8
+                        Data.Word8
   Build-Depends:        base >= 4 && < 5
 
 Source-Repository head
