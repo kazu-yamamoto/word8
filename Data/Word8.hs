@@ -1,4 +1,8 @@
--- | Word8 library to be used with Data.ByteString
+-- | Word8 library to be used with Data.ByteString.
+-- All function assumes that 'Word8' is encoded in Latin-1 (ISO-8859-1).
+-- All utility functions are supposed to work as if
+-- those of 'Data.Char'. Exceptions are described in
+-- the function documentations.
 
 module Data.Word8 (
   -- * Re-exporting
@@ -125,6 +129,7 @@ isAsciiLower w = _a <= w && w <= _z
 
 ----------------------------------------------------------------
 
+-- | Micro sign/mu (0xb5) and small letter Y with diaeresis (0xff) remain the same.
 toUpper :: Word8 -> Word8
 toUpper w
   | w == _germandbls = w
@@ -136,6 +141,7 @@ toLower w
   | isUpper w = w + _space
   | otherwise = w
 
+-- | Micro sign/mu (0xb5) and small letter Y with diaeresis (0xff) remain the same.
 toTitle :: Word8 -> Word8
 toTitle = toUpper
 

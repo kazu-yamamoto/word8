@@ -1,6 +1,11 @@
 {-# LANGUAGE MagicHash #-}
 
--- | Char8 library to be used with Data.ByteString.Char8
+-- | Char8 library to be used with Data.ByteString.Char8.
+-- All function assumes that only 8bit part of 'Char' is used
+-- and it is encoded in Latin-1 (ISO-8859-1).
+-- All utility functions are supposed to work as if
+-- those of 'Data.Char'. Exceptions are described in
+-- the function documentations.
 
 module Data.Char8 (
   -- * Character classification
@@ -99,7 +104,7 @@ isAscii :: Char -> Bool
 isAscii c = _nul <= c && c <= _del
 
 isLatin1 :: Char -> Bool
-isLatin1 _ = True
+isLatin1 (C# c#) = ord# c# <# 0xff#
 
 isAsciiUpper :: Char -> Bool
 isAsciiUpper c = 'A' <= c && c <= 'Z'
@@ -109,6 +114,7 @@ isAsciiLower c = 'a' <= c && c <= 'z'
 
 ----------------------------------------------------------------
 
+-- | Micro sign/mu (0xb5) and small letter Y with diaeresis (0xff) remain the same.
 toUpper :: Char -> Char
 toUpper c@(C# c#)
   | c == _germandbls = c
@@ -120,6 +126,7 @@ toLower c@(C# c#)
   | isUpper c = C# (chr# (ord# c# +# 32#))
   | otherwise = c
 
+-- | Micro sign/mu (0xb5) and small letter Y with diaeresis (0xff) remain the same.
 toTitle :: Char -> Char
 toTitle = toUpper
 
