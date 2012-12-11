@@ -29,6 +29,17 @@ Test-Suite spec
                       , word8
                       , hspec
 
+Benchmark criterion
+  Type:                 exitcode-stdio-1.0
+  Default-Language:     Haskell2010
+  Hs-Source-Dirs:       bench
+  Ghc-Options:          -Wall
+  Main-Is:              Bench.hs
+  Build-Depends:        base
+                      , bytestring
+                      , criterion
+                      , word8
+
 Source-Repository head
   Type:                 git
   Location:             https://github.com/kazu-yamamoto/word8
