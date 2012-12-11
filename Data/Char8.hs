@@ -104,7 +104,7 @@ isAscii :: Char -> Bool
 isAscii c = _nul <= c && c <= _del
 
 isLatin1 :: Char -> Bool
-isLatin1 (C# c#) = ord# c# <# 0xff#
+isLatin1 (C# c#) = ord# c# <=# 0xff#
 
 isAsciiUpper :: Char -> Bool
 isAsciiUpper c = 'A' <= c && c <= 'Z'
