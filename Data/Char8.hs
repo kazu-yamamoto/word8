@@ -1,4 +1,4 @@
-{-# LANGUAGE MagicHash #-}
+{-# LANGUAGE MagicHash, CPP #-}
 
 -- | Char8 library to be used with Data.ByteString.Char8.
 -- All function assumes that only 8bit part of 'Char' is used
@@ -104,7 +104,11 @@ isAscii :: Char -> Bool
 isAscii c = _nul <= c && c <= _del
 
 isLatin1 :: Char -> Bool
+#if __GLASGOW_HASKELL__ >= 707
+isLatin1 (C# c#) = isTrue# (ord# c# <=# 0xff#)
+#else
 isLatin1 (C# c#) = ord# c# <=# 0xff#
+#endif
 
 isAsciiUpper :: Char -> Bool
 isAsciiUpper c = 'A' <= c && c <= 'Z'
