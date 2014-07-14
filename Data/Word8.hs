@@ -23,7 +23,7 @@ module Data.Word8 (
   , _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z
   , _braketleft, _backslash, _bracketright, _circum, _underscore, _grave
   , _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z
-  , _blaceleft, _bar, _braceright, _tilde, _del
+  , _braceleft, _bar, _braceright, _tilde, _del
   -- * Some Latin-1 charactors
   , _nbsp
   , _ordfeminine, _softhyphen, _mu, _ordmasculine
@@ -258,8 +258,8 @@ _x = 0x78
 _y = 0x79
 _z = 0x7a
 
-_blaceleft, _bar, _braceright, _tilde, _del :: Word8
-_blaceleft  = 0x7b
+_braceleft, _bar, _braceright, _tilde, _del :: Word8
+_braceleft  = 0x7b
 _bar        = 0x7c
 _braceright = 0x7d
 _tilde      = 0x7e
