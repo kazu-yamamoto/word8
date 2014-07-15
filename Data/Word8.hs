@@ -21,7 +21,7 @@ module Data.Word8 (
   , _0, _1, _2, _3, _4, _5, _6, _7, _8, _9
   , _colon, _semicolon, _less, _equal, _greater, _question, _at
   , _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z
-  , _braketleft, _backslash, _bracketright, _circum, _underscore, _grave
+  , _bracketleft, _backslash, _bracketright, _circum, _underscore, _grave
   , _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z
   , _braceleft, _bar, _braceright, _tilde, _del
   -- * Some Latin-1 charactors
@@ -222,8 +222,8 @@ _X = 0x58
 _Y = 0x59
 _Z = 0x5a
 
-_braketleft, _backslash, _bracketright, _circum, _underscore, _grave :: Word8
-_braketleft   = 0x5b
+_bracketleft, _backslash, _bracketright, _circum, _underscore, _grave :: Word8
+_bracketleft   = 0x5b
 _backslash    = 0x5c
 _bracketright = 0x5d
 _circum       = 0x5e
