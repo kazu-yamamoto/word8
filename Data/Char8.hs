@@ -6,6 +6,10 @@
 -- All utility functions are supposed to work as if
 -- those of 'Data.Char'. Exceptions are described in
 -- the function documentations.
+--
+-- Base library 4.7 (GHC 7.8) or earlier is based on Unicode 6.
+-- Base library 4.8 (GHC 7.10) or later is based on Unicode 7.
+-- 'isLower', 'isSymbol' and 'isPunctuation' behave differently.
 
 module Data.Char8 (
   -- * Character classification
@@ -34,6 +38,8 @@ isSpace c = c == _space
          || c == _vt
          || c == _nbsp
 
+-- | This function returns 'True' for 170 and 186 in Unicode 6.
+--   But it returns 'False' in Unicode 7.
 isLower :: Char -> Bool
 isLower c = isLower' c
          || c == _mu
@@ -96,6 +102,8 @@ isNumber c = isDigit c
           || c == _1'2
           || c == _3'4
 
+-- | This function returns 'False' for 167 and 182 in Unicode 6.
+--   But it returns 'True' in Unicode 7.
 isPunctuation :: Char -> Bool
 #if MIN_VERSION_base(4,8,0)
 isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xa7','\xab','\xb6','\xb7','\xbb','\xbf']
@@ -103,6 +111,8 @@ isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x
 isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xab','\xb7','\xbb','\xbf']
 #endif
 
+-- | This function returns 'True' for 167 and 182 in Unicode 6.
+--   But it returns 'False' in Unicode 7.
 isSymbol :: Char -> Bool
 #if MIN_VERSION_base(4,8,0)
 isSymbol c = c `elem` ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e','\xa2','\xa3','\xa4','\xa5','\xa6','\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb8','\xd7','\xf7']
