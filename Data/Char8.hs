@@ -36,8 +36,16 @@ isSpace c = c == _space
 
 isLower :: Char -> Bool
 isLower c = isLower' c
-         || c == _ordfeminine
          || c == _mu
+#if !MIN_VERSION_base(4,8,0)
+         || c == _ordfeminine
+         || c == _ordmasculine
+#endif
+
+isLowerCommon :: Char -> Bool
+isLowerCommon c = isLower' c
+         || c == _mu
+         || c == _ordfeminine
          || c == _ordmasculine
 
 isLower' :: Char -> Bool
@@ -51,7 +59,7 @@ isUpper c = isAsciiUpper c
          || _Oslash <= c && c <= _Thorn
 
 isAlpha :: Char -> Bool
-isAlpha c = isLower c || isUpper c
+isAlpha c = isLowerCommon c || isUpper c
 
 isAlphaNum :: Char -> Bool
 isAlphaNum c = isAlpha c || isNumber c
@@ -74,7 +82,7 @@ isHexDigit c = isDigit c
             || 'a' <= c && c <= 'f'
 
 isLetter :: Char -> Bool
-isLetter c = isLower c || isUpper c
+isLetter c = isLowerCommon c || isUpper c
 
 isMark :: Char -> Bool
 isMark _ = False
@@ -89,10 +97,18 @@ isNumber c = isDigit c
           || c == _3'4
 
 isPunctuation :: Char -> Bool
+#if MIN_VERSION_base(4,8,0)
+isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xa7','\xab','\xb6','\xb7','\xbb','\xbf']
+#else
 isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xab','\xb7','\xbb','\xbf']
+#endif
 
 isSymbol :: Char -> Bool
+#if MIN_VERSION_base(4,8,0)
+isSymbol c = c `elem` ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e','\xa2','\xa3','\xa4','\xa5','\xa6','\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb8','\xd7','\xf7']
+#else
 isSymbol c = c `elem` ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e','\xa2','\xa3','\xa4','\xa5','\xa6','\xa7','\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb6','\xb8','\xd7','\xf7']
+#endif
 
 isSeparator :: Char -> Bool
 isSeparator c = c == _space
