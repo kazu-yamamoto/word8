@@ -102,7 +102,7 @@ prop_toUpper c
   | c == _mu        = True
   | c == _ydieresis = True
   | otherwise       = toUpper c == C.toUpper c
-    
+
 prop_toTitle :: Char -> Bool
 prop_toTitle c
   | c == _mu  = True
