@@ -1,4 +1,5 @@
-{-# LANGUAGE MagicHash, CPP #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE MagicHash #-}
 
 -- | Char8 library to be used with Data.ByteString.Char8.
 -- All function assumes that only 8bit part of 'Char' is used
@@ -26,7 +27,7 @@ import GHC.Base
 ----------------------------------------------------------------
 
 isControl :: Char -> Bool
-isControl c = _nul <= c && c <= '\x1f'
+isControl c = c <= '\x1f'
            || _del <= c && c <= '\x9f'
 
 isSpace :: Char -> Bool
@@ -56,13 +57,11 @@ isLowerCommon c = isLower' c
 
 isLower' :: Char -> Bool
 isLower' c = isAsciiLower c
-          || _germandbls <= c && c <= _odieresis
-          || _oslash     <= c && c <= _ydieresis
+          || _germandbls <= c && c <= _ydieresis && c /= '\xf7'
 
 isUpper :: Char -> Bool
 isUpper c = isAsciiUpper c
-         || _Agrave <= c && c <= _Odieresis
-         || _Oslash <= c && c <= _Thorn
+         || _Agrave <= c && c <=_Thorn && c /= '\xd7'
 
 isAlpha :: Char -> Bool
 isAlpha c = isLowerCommon c || isUpper c
@@ -73,7 +72,7 @@ isAlphaNum c = isAlpha c || isNumber c
 isPrint :: Char -> Bool
 isPrint c
   | c == _softhyphen = False
-isPrint c = _space <= c && c <= '~'
+isPrint c = _space <= c && c <= _tilde
          || _nbsp  <= c && c <= _ydieresis
 
 isDigit :: Char -> Bool
@@ -105,20 +104,29 @@ isNumber c = isDigit c
 -- | This function returns 'False' for 167 and 182 in Unicode 6.
 --   But it returns 'True' in Unicode 7.
 isPunctuation :: Char -> Bool
+isPunctuation c =
+    c `elem`
+        ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f'
+        ,'\x3a','\x3b','\x3f'
+        ,'\x40'
+        ,'\x5b','\x5c','\x5d','\x5f'
+        ,'\x7b','\x7d'
 #if MIN_VERSION_base(4,8,0)
-isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xa7','\xab','\xb6','\xb7','\xbb','\xbf']
-#else
-isPunctuation c = c `elem` ['\x21','\x22','\x23','\x25','\x26','\x27','\x28','\x29','\x2a','\x2c','\x2d','\x2e','\x2f','\x3a','\x3b','\x3f','\x40','\x5b','\x5c','\x5d','\x5f','\x7b','\x7d','\xa1','\xab','\xb7','\xbb','\xbf']
+        ,'\xa7','\xb6'
 #endif
+        ,'\xa1','\xab','\xb7','\xbb','\xbf']
 
 -- | This function returns 'True' for 167 and 182 in Unicode 6.
 --   But it returns 'False' in Unicode 7.
 isSymbol :: Char -> Bool
-#if MIN_VERSION_base(4,8,0)
-isSymbol c = c `elem` ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e','\xa2','\xa3','\xa4','\xa5','\xa6','\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb8','\xd7','\xf7']
-#else
-isSymbol c = c `elem` ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e','\xa2','\xa3','\xa4','\xa5','\xa6','\xa7','\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb6','\xb8','\xd7','\xf7']
+isSymbol c =
+    c `elem`
+        ['\x24','\x2b','\x3c','\x3d','\x3e','\x5e','\x60','\x7c','\x7e'
+        ,'\xa2','\xa3','\xa4','\xa5','\xa6'
+#if !MIN_VERSION_base(4,8,0)
+        ,'\xa7','\xb6'
 #endif
+        ,'\xa8','\xa9','\xac','\xae','\xaf','\xb0','\xb1','\xb4','\xb8','\xd7','\xf7']
 
 isSeparator :: Char -> Bool
 isSeparator c = c == _space
@@ -127,7 +135,11 @@ isSeparator c = c == _space
 ----------------------------------------------------------------
 
 isAscii :: Char -> Bool
-isAscii c = _nul <= c && c <= _del
+#if __GLASGOW_HASKELL__ >= 707
+isAscii (C# c#) = isTrue# (ord# c# <=# 0x7f#)
+#else
+isAscii (C# c#) = ord# c# <=# 0x7f#
+#endif
 
 isLatin1 :: Char -> Bool
 #if __GLASGOW_HASKELL__ >= 707
@@ -170,8 +182,9 @@ _vt  = '\x0b'
 _np  = '\x0c'
 _cr  = '\x0d'
 
-_space, _del, _nbsp :: Char
+_space, _tilde, _del, _nbsp :: Char
 _space = '\x20'
+_tilde = '\x7e'
 _del   = '\x7f'
 _nbsp  = '\xa0'
 
@@ -189,16 +202,10 @@ _1'4 = '\xbc'
 _1'2 = '\xbd'
 _3'4 = '\xbe'
 
-_Agrave, _Odieresis, _Oslash, _Thorn :: Char
+_Agrave, _Thorn :: Char
 _Agrave    = '\xc0'
-_Odieresis = '\xd6'
-_Oslash    = '\xd8'
 _Thorn     = '\xde'
 
-_germandbls, _agrave, _odieresis, _oslash, _thorn, _ydieresis :: Char
+_germandbls, _ydieresis :: Char
 _germandbls = '\xdf'
-_agrave     = '\xe0'
-_odieresis  = '\xf6'
-_oslash     = '\xf8'
-_thorn      = '\xfe'
 _ydieresis  = '\xff'
