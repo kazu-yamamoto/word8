@@ -37,6 +37,7 @@ Benchmark criterion
   Hs-Source-Dirs:       bench
   Ghc-Options:          -Wall
   Main-Is:              Bench.hs
+  Other-Modules:        Bench.Extra
   Build-Depends:        base
                       , bytestring
                       , criterion
