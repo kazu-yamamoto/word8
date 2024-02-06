@@ -126,15 +126,15 @@ spec = do
 
 prop_toUpper :: Word8 -> Bool
 prop_toUpper w
-  | w == _mu        = True
-  | w == _ydieresis = True
-  | otherwise       = word8ToChar (toUpper w) == C.toUpper (word8ToChar w)
+    | w == _mu = True
+    | w == _ydieresis = True
+    | otherwise = word8ToChar (toUpper w) == C.toUpper (word8ToChar w)
 
 prop_toTitle :: Word8 -> Bool
 prop_toTitle w
-  | w == _mu  = True
-  | w == _ydieresis = True
-  | otherwise = word8ToChar (toTitle w) == C.toTitle (word8ToChar w)
+    | w == _mu = True
+    | w == _ydieresis = True
+    | otherwise = word8ToChar (toTitle w) == C.toTitle (word8ToChar w)
 
 ----------------------------------------------------------------
 

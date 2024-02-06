@@ -10,43 +10,170 @@
 -- Base library 4.8 (GHC 7.10) or later is based on Unicode 7.
 --
 -- 'isLower', 'isSymbol' and 'isPunctuation' behave differently.
-
 module Data.Word8 (
-  -- * Re-exporting
-    Word8
+    -- * Re-exporting
+    Word8,
 
-  -- * Functions on bytes
+    -- * Functions on bytes
 
-  -- ** Character classification
-  , isControl, isSpace, isLower, isUpper
-  , isAlpha, isAlphaNum, isPrint, isDigit, isOctDigit, isHexDigit
-  , isLetter, isMark, isNumber, isPunctuation, isSymbol, isSeparator
+    -- ** Character classification
+    isControl,
+    isSpace,
+    isLower,
+    isUpper,
+    isAlpha,
+    isAlphaNum,
+    isPrint,
+    isDigit,
+    isOctDigit,
+    isHexDigit,
+    isLetter,
+    isMark,
+    isNumber,
+    isPunctuation,
+    isSymbol,
+    isSeparator,
 
-  -- ** Subranges
-  , isAscii, isLatin1, isAsciiUpper, isAsciiLower
+    -- ** Subranges
+    isAscii,
+    isLatin1,
+    isAsciiUpper,
+    isAsciiLower,
 
-  -- ** Case conversion
-  , toUpper, toLower, toTitle
+    -- ** Case conversion
+    toUpper,
+    toLower,
+    toTitle,
 
-  -- * Byte constants
+    -- * Byte constants
 
-  -- ** ASCII characters
-  , _nul, _tab, _lf, _vt, _np, _cr
-  , _space, _exclam, _quotedbl, _numbersign, _dollar, _percent, _ampersand, _quotesingle, _parenleft, _parenright, _asterisk, _plus, _comma, _hyphen, _period, _slash
-  , _0, _1, _2, _3, _4, _5, _6, _7, _8, _9
-  , _colon, _semicolon, _less, _equal, _greater, _question, _at
-  , _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z
-  , _bracketleft, _backslash, _bracketright, _circum, _underscore, _grave
-  , _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z
-  , _braceleft, _bar, _braceright, _tilde, _del
+    -- ** ASCII characters
+    _nul,
+    _tab,
+    _lf,
+    _vt,
+    _np,
+    _cr,
+    _space,
+    _exclam,
+    _quotedbl,
+    _numbersign,
+    _dollar,
+    _percent,
+    _ampersand,
+    _quotesingle,
+    _parenleft,
+    _parenright,
+    _asterisk,
+    _plus,
+    _comma,
+    _hyphen,
+    _period,
+    _slash,
+    _0,
+    _1,
+    _2,
+    _3,
+    _4,
+    _5,
+    _6,
+    _7,
+    _8,
+    _9,
+    _colon,
+    _semicolon,
+    _less,
+    _equal,
+    _greater,
+    _question,
+    _at,
+    _A,
+    _B,
+    _C,
+    _D,
+    _E,
+    _F,
+    _G,
+    _H,
+    _I,
+    _J,
+    _K,
+    _L,
+    _M,
+    _N,
+    _O,
+    _P,
+    _Q,
+    _R,
+    _S,
+    _T,
+    _U,
+    _V,
+    _W,
+    _X,
+    _Y,
+    _Z,
+    _bracketleft,
+    _backslash,
+    _bracketright,
+    _circum,
+    _underscore,
+    _grave,
+    _a,
+    _b,
+    _c,
+    _d,
+    _e,
+    _f,
+    _g,
+    _h,
+    _i,
+    _j,
+    _k,
+    _l,
+    _m,
+    _n,
+    _o,
+    _p,
+    _q,
+    _r,
+    _s,
+    _t,
+    _u,
+    _v,
+    _w,
+    _x,
+    _y,
+    _z,
+    _braceleft,
+    _bar,
+    _braceright,
+    _tilde,
+    _del,
 
-  -- ** Some Latin-1 characters
-  , _nbsp
-  , _ordfeminine, _softhyphen, _mu, _ordmasculine
-  , _s2, _s3, _s1, _1'4, _1'2, _3'4
-  , _Agrave, _Odieresis, _Oslash, _Thorn
-  , _germandbls, _agrave, _odieresis, _oslash, _thorn, _ydieresis
-  ) where
+    -- ** Some Latin-1 characters
+    _nbsp,
+    _ordfeminine,
+    _softhyphen,
+    _mu,
+    _ordmasculine,
+    _s2,
+    _s3,
+    _s1,
+    _1'4,
+    _1'2,
+    _3'4,
+    _Agrave,
+    _Odieresis,
+    _Oslash,
+    _Thorn,
+    _germandbls,
+    _agrave,
+    _odieresis,
+    _oslash,
+    _thorn,
+    _ydieresis,
+) where
 
 import Data.Bits ((.&.))
 import Data.Word (Word8)
@@ -59,45 +186,52 @@ import Data.Word (Word8)
 
 -- | Is the byte a control character
 isControl :: Word8 -> Bool
-isControl w = w <= 0x1f
-           || _del <= w && w <= 0x9f
+isControl w =
+    w <= 0x1f
+        || _del <= w && w <= 0x9f
 
 -- | Is the byte white space
 isSpace :: Word8 -> Bool
-isSpace w = w == _space
-         || w == _tab
-         || w == _lf
-         || w == _cr
-         || w == _np
-         || w == _vt
-         || w == _nbsp
+isSpace w =
+    w == _space
+        || w == _tab
+        || w == _lf
+        || w == _cr
+        || w == _np
+        || w == _vt
+        || w == _nbsp
 
 -- | Is the byte a lower case character
 --
 -- This function returns 'True' for 170 (@'ª'@) and 186 (@'º'@) in Unicode 6.
 -- But it returns 'False' in Unicode 7.
 isLower :: Word8 -> Bool
-isLower w = isLower' w
-         || w == _mu
+isLower w =
+    isLower' w
+        || w == _mu
 #if !MIN_VERSION_base(4,8,0)
-         || w == _ordfeminine
-         || w == _ordmasculine
+        || w == _ordfeminine
+        || w == _ordmasculine
+
 #endif
 
 isLowerCommon :: Word8 -> Bool
-isLowerCommon w = isLower' w
-         || w == _mu
-         || w == _ordfeminine
-         || w == _ordmasculine
+isLowerCommon w =
+    isLower' w
+        || w == _mu
+        || w == _ordfeminine
+        || w == _ordmasculine
 
 isLower' :: Word8 -> Bool
-isLower' w = isAsciiLower w
-          || _germandbls <= w && w <= _ydieresis && w /= 0xf7
+isLower' w =
+    isAsciiLower w
+        || _germandbls <= w && w <= _ydieresis && w /= 0xf7
 
 -- | Is the byte an upper case character
 isUpper :: Word8 -> Bool
-isUpper w = isAsciiUpper w
-         || _Agrave <= w && w <= _Thorn && w /= 0xd7
+isUpper w =
+    isAsciiUpper w
+        || _Agrave <= w && w <= _Thorn && w /= 0xd7
 
 -- | Is the byte an alphabet letter
 --
@@ -112,9 +246,10 @@ isAlphaNum w = isAlpha w || isNumber w
 -- | Is the byte printable
 isPrint :: Word8 -> Bool
 isPrint w
-  | w == _softhyphen = False
-isPrint w = _space <= w && w <= _tilde
-         || _nbsp  <= w && w <= _ydieresis
+    | w == _softhyphen = False
+isPrint w =
+    _space <= w && w <= _tilde
+        || _nbsp <= w && w <= _ydieresis
 
 -- | Is the byte a digit (@0-9@)
 isDigit :: Word8 -> Bool
@@ -126,9 +261,10 @@ isOctDigit w = _0 <= w && w <= _7
 
 -- | Is the byte a hexidecimal digit (@0-9a-zA-Z@)
 isHexDigit :: Word8 -> Bool
-isHexDigit w = isDigit w
-            || _A <= w && w <= _F
-            || _a <= w && w <= _f
+isHexDigit w =
+    isDigit w
+        || _A <= w && w <= _F
+        || _a <= w && w <= _f
 
 -- | Is the byte an alphabet letter
 --
@@ -144,13 +280,14 @@ isMark _ = False
 
 -- | Is the byte a number
 isNumber :: Word8 -> Bool
-isNumber w = isDigit w
-          || w == _s1
-          || w == _s2
-          || w == _s3
-          || w == _1'4
-          || w == _1'2
-          || w == _3'4
+isNumber w =
+    isDigit w
+        || w == _s1
+        || w == _s2
+        || w == _s3
+        || w == _1'4
+        || w == _1'2
+        || w == _3'4
 
 -- | Is the byte a punctuation character
 --
@@ -158,14 +295,40 @@ isNumber w = isDigit w
 -- But it returns 'True' in Unicode 7.
 isPunctuation :: Word8 -> Bool
 isPunctuation w =
-    w `elem`
-        [0x21,0x22,0x23,0x25,0x26,0x27,0x28,0x29,0x2a,0x2c,0x2d,0x2e,0x2f
-        ,0x3a,0x3b,0x3f,0x40,0x5b,0x5c,0x5d,0x5f,0x7b,0x7d
-        ,0xa1
+    w
+        `elem` [ 0x21
+               , 0x22
+               , 0x23
+               , 0x25
+               , 0x26
+               , 0x27
+               , 0x28
+               , 0x29
+               , 0x2a
+               , 0x2c
+               , 0x2d
+               , 0x2e
+               , 0x2f
+               , 0x3a
+               , 0x3b
+               , 0x3f
+               , 0x40
+               , 0x5b
+               , 0x5c
+               , 0x5d
+               , 0x5f
+               , 0x7b
+               , 0x7d
+               , 0xa1
 #if MIN_VERSION_base(4,8,0)
-        ,0xa7,0xb6
+               , 0xa7
+               , 0xb6
 #endif
-        ,0xab,0xb7,0xbb,0xbf]
+               , 0xab
+               , 0xb7
+               , 0xbb
+               , 0xbf
+               ]
 
 -- | Is the byte a symbol character
 --
@@ -173,19 +336,43 @@ isPunctuation w =
 -- But it returns 'False' in Unicode 7.
 isSymbol :: Word8 -> Bool
 isSymbol w =
-    w `elem`
-        [0x24,0x2b,0x3c,0x3d,0x3e,0x5e,0x60
-        ,0x7c,0x7e
-        ,0xa2,0xa3,0xa4,0xa5,0xa6
+    w
+        `elem` [ 0x24
+               , 0x2b
+               , 0x3c
+               , 0x3d
+               , 0x3e
+               , 0x5e
+               , 0x60
+               , 0x7c
+               , 0x7e
+               , 0xa2
+               , 0xa3
+               , 0xa4
+               , 0xa5
+               , 0xa6
 #if !MIN_VERSION_base(4,8,0)
-        ,0xa7,0xb6
+               , 0xa7
+               , 0xb6
 #endif
-        ,0xa8,0xa9,0xac,0xae,0xaf,0xb0,0xb1,0xb4,0xb8,0xd7,0xf7]
+               , 0xa8
+               , 0xa9
+               , 0xac
+               , 0xae
+               , 0xaf
+               , 0xb0
+               , 0xb1
+               , 0xb4
+               , 0xb8
+               , 0xd7
+               , 0xf7
+               ]
 
 -- | Is the byte a (non-breaking) space
 isSeparator :: Word8 -> Bool
-isSeparator w = w == _space
-             || w == _nbsp
+isSeparator w =
+    w == _space
+        || w == _nbsp
 
 ----------------------------------------------------------------
 
@@ -214,15 +401,15 @@ isAsciiLower w = _a <= w && w <= _z
 -- Micro sign/mu ('_mu') and small letter Y with diaeresis ('_ydieresis') remain the same.
 toUpper :: Word8 -> Word8
 toUpper w
-  | w == _germandbls = w
-  | isLower' w       = w - _space
-  | otherwise        = w
+    | w == _germandbls = w
+    | isLower' w = w - _space
+    | otherwise = w
 
 -- | Changes the byte to the lower case variant, if possible.
 toLower :: Word8 -> Word8
 toLower w
-  | isUpper w = w + _space
-  | otherwise = w
+    | isUpper w = w + _space
+    | otherwise = w
 
 -- | Synonym for 'toUpper'
 toTitle :: Word8 -> Word8
@@ -527,7 +714,6 @@ _nul = 0x00
 -- _us :: Word8
 -- _us = 0x1F
 
-
 -- | Horizontal Tab
 --
 -- > BIN:  0b00001001
@@ -758,7 +944,6 @@ _period = 0x2e
 -- > Char: '/'
 _slash :: Word8
 _slash = 0x2f
-
 
 -- | Zero
 --
@@ -1288,7 +1473,6 @@ _circum = 0x5e
 _underscore :: Word8
 _underscore = 0x5f
 
-
 -- | Grave accent
 --
 -- > BIN:  0b01100000
@@ -1757,7 +1941,7 @@ _1'2 = 0xbd
 -- > HEX:  0xBE
 -- > HTML: &#190; or &frac34;
 -- > Char: '¾'
-_3'4  :: Word8
+_3'4 :: Word8
 _3'4 = 0xbe
 
 -- | Latin capital letter A with grave
@@ -1803,7 +1987,6 @@ _Oslash = 0xd8
 -- > Char: 'Þ'
 _Thorn :: Word8
 _Thorn = 0xde
-
 
 -- | Latin small letter sharp s - ess-zed
 --

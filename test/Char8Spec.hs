@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE GeneralisedNewtypeDeriving #-}
+
 module Char8Spec where
 
 import qualified Data.Char as C
@@ -129,20 +130,20 @@ spec = do
 
 prop_toUpper :: Char8 -> Bool
 prop_toUpper (Char8 c)
-  | c == _mu        = True
-  | c == _ydieresis = True
-  | otherwise       = toUpper c == C.toUpper c
+    | c == _mu = True
+    | c == _ydieresis = True
+    | otherwise = toUpper c == C.toUpper c
 
 prop_toTitle :: Char8 -> Bool
 prop_toTitle (Char8 c)
-  | c == _mu  = True
-  | c == _ydieresis = True
-  | otherwise = toTitle c == C.toTitle c
+    | c == _mu = True
+    | c == _ydieresis = True
+    | otherwise = toTitle c == C.toTitle c
 
 ----------------------------------------------------------------
 
 _mu, _ydieresis :: Char
-_mu        = '\xb5'
+_mu = '\xb5'
 _ydieresis = '\xff'
 
 newtype Char8 = Char8 Char
