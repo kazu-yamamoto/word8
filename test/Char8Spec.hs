@@ -1,110 +1,140 @@
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE GeneralisedNewtypeDeriving #-}
 module Char8Spec where
 
 import qualified Data.Char as C
 import Data.Char8
+import Data.Word8 (Word8)
 import Test.Hspec
 import Test.Hspec.QuickCheck
+import Test.QuickCheck (Arbitrary (..), withMaxSuccess)
+
+allChar8 :: String
+allChar8 = ['\0' .. '\255']
 
 spec :: Spec
 spec = do
     describe "isControl" $ do
-        prop "behaves like model" $ \c ->
-            isControl c == C.isControl c
+        it "behaves like model" $
+            (isControl <$> allChar8)
+                == (C.isControl <$> allChar8)
 
     describe "isSpace" $ do
-        prop "behaves like model" $ \c ->
-            isSpace c == C.isSpace c
+        it "behaves like model" $
+            (isSpace <$> allChar8)
+                == (C.isSpace <$> allChar8)
 
     describe "isLower" $ do
-        prop "behaves like model" $ \c ->
-            isLower c == C.isLower c
+        it "behaves like model" $
+            (isLower <$> allChar8)
+                == (C.isLower <$> allChar8)
 
     describe "isUpper" $ do
-        prop "behaves like model" $ \c ->
-            isUpper c == C.isUpper c
+        it "behaves like model" $
+            (isUpper <$> allChar8)
+                == (C.isUpper <$> allChar8)
 
     describe "isAlpha" $ do
-        prop "behaves like model" $ \c ->
-            isAlpha c == C.isAlpha c
+        it "behaves like model" $
+            (isAlpha <$> allChar8)
+                == (C.isAlpha <$> allChar8)
 
     describe "isAlphaNum" $ do
-        prop "behaves like model" $ \c ->
-            isAlphaNum c == C.isAlphaNum c
+        it "behaves like model" $
+            (isAlphaNum <$> allChar8)
+                == (C.isAlphaNum <$> allChar8)
 
     describe "isPrint" $ do
-        prop "behaves like model" $ \c ->
-            isPrint c == C.isPrint c
+        it "behaves like model" $
+            (isPrint <$> allChar8)
+                == (C.isPrint <$> allChar8)
 
     describe "isDigit" $ do
-        prop "behaves like model" $ \c ->
-            isDigit c == C.isDigit c
+        it "behaves like model" $
+            (isDigit <$> allChar8)
+                == (C.isDigit <$> allChar8)
 
     describe "isOctDigit" $ do
-        prop "behaves like model" $ \c ->
-            isOctDigit c == C.isOctDigit c
+        it "behaves like model" $
+            (isOctDigit <$> allChar8)
+                == (C.isOctDigit <$> allChar8)
 
     describe "isHexDigit" $ do
-        prop "behaves like model" $ \c ->
-            isHexDigit c == C.isHexDigit c
+        it "behaves like model" $
+            (isHexDigit <$> allChar8)
+                == (C.isHexDigit <$> allChar8)
 
     describe "isLetter" $ do
-        prop "behaves like model" $ \c ->
-            isLetter c == C.isLetter c
+        it "behaves like model" $
+            (isLetter <$> allChar8)
+                == (C.isLetter <$> allChar8)
 
     describe "isMark" $ do
-        prop "behaves like model" $ \c ->
-            isMark c == C.isMark c
+        it "behaves like model" $
+            (isMark <$> allChar8)
+                == (C.isMark <$> allChar8)
 
     describe "isNumber" $ do
-        prop "behaves like model" $ \c ->
-            isNumber c == C.isNumber c
+        it "behaves like model" $
+            (isNumber <$> allChar8)
+                == (C.isNumber <$> allChar8)
 
     describe "isPunctuation" $ do
-        prop "behaves like model" $ \c ->
-            isPunctuation c == C.isPunctuation c
+        it "behaves like model" $
+            (isPunctuation <$> allChar8)
+                == (C.isPunctuation <$> allChar8)
 
     describe "isSymbol" $ do
-        prop "behaves like model" $ \c ->
-            isSymbol c == C.isSymbol c
+        it "behaves like model" $
+            (isSymbol <$> allChar8)
+                == (C.isSymbol <$> allChar8)
 
     describe "isSeparator" $ do
-        prop "behaves like model" $ \c ->
-            isSeparator c == C.isSeparator c
+        it "behaves like model" $
+            (isSeparator <$> allChar8)
+                == (C.isSeparator <$> allChar8)
 
     describe "isAscii" $ do
-        prop "behaves like model" $ \c ->
-            isAscii c == C.isAscii c
+        it "behaves like model" $
+            (isAscii <$> allChar8)
+                == (C.isAscii <$> allChar8)
 
     describe "isLatin1" $ do
-        prop "behaves like model" $ \c ->
-            isLatin1 c == C.isLatin1 c
+        it "behaves like model" $
+            (isLatin1 <$> allChar8)
+                == (C.isLatin1 <$> allChar8)
 
     describe "isAsciiUpper" $ do
-        prop "behaves like model" $ \c ->
-            isAsciiUpper c == C.isAsciiUpper c
+        it "behaves like model" $
+            (isAsciiUpper <$> allChar8)
+                == (C.isAsciiUpper <$> allChar8)
 
     describe "isAsciiLower" $ do
-        prop "behaves like model" $ \c ->
-            isAsciiLower c == C.isAsciiLower c
+        it "behaves like model" $
+            (isAsciiLower <$> allChar8)
+                == (C.isAsciiLower <$> allChar8)
 
     describe "toUpper" $ do
-        prop "behaves like model" $ prop_toUpper
+        prop "behaves like model" $
+            withMaxSuccess 10000 prop_toUpper
 
     describe "toLower" $ do
-        prop "behaves like model" $ \c ->
-            toLower c == C.toLower c
+        it "behaves like model" $
+            (toLower <$> allChar8)
+                == (C.toLower <$> allChar8)
 
     describe "toTitle" $ do
-        prop "behaves like model" $ prop_toTitle
+        prop "behaves like model" $
+            withMaxSuccess 10000 prop_toTitle
 
-prop_toUpper :: Char -> Bool
-prop_toUpper c
+prop_toUpper :: Char8 -> Bool
+prop_toUpper (Char8 c)
   | c == _mu        = True
   | c == _ydieresis = True
   | otherwise       = toUpper c == C.toUpper c
-    
-prop_toTitle :: Char -> Bool
-prop_toTitle c
+
+prop_toTitle :: Char8 -> Bool
+prop_toTitle (Char8 c)
   | c == _mu  = True
   | c == _ydieresis = True
   | otherwise = toTitle c == C.toTitle c
@@ -114,3 +144,11 @@ prop_toTitle c
 _mu, _ydieresis :: Char
 _mu        = '\xb5'
 _ydieresis = '\xff'
+
+newtype Char8 = Char8 Char
+    deriving newtype (Eq, Show)
+
+instance Arbitrary Char8 where
+    arbitrary = do
+        w8 <- arbitrary
+        pure $ Char8 $ C.chr $ fromIntegral (w8 :: Word8)
