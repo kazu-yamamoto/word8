@@ -21,7 +21,7 @@ jobs:
             ghc: '9.12'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: haskell-actions/setup@v2
         id: setup
@@ -34,7 +34,7 @@ jobs:
       - name: Generate plan
         run: cabal build all --dry-run
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ${{ steps.setup.outputs.cabal-store }}
           key: ${{ runner.os }}-ghc-${{ steps.setup.outputs.ghc-version }}-${{ hashFiles('dist-newstyle/cache/plan.json') }}

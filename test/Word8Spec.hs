@@ -111,30 +111,24 @@ spec = do
 
     describe "toUpper" $ do
         it "behaves like model" $
-            all prop_toUpper allWord8
+            (word8ToChar . toUpper <$> allWord8)
+                == (latin1Model C.toUpper . word8ToChar <$> allWord8)
 
     describe "toLower" $ do
         it "behaves like model" $
             (word8ToChar . toLower <$> allWord8)
-                == (C.toLower . word8ToChar <$> allWord8)
+                == (latin1Model C.toLower . word8ToChar <$> allWord8)
 
     describe "toTitle" $ do
         it "behaves like model" $
-            all prop_toTitle allWord8
-
-prop_toUpper :: Word8 -> Bool
-prop_toUpper w
-    | w == _mu = toUpper w == w
-    | w == _ydieresis = toUpper w == w
-    | otherwise = word8ToChar (toUpper w) == C.toUpper (word8ToChar w)
-
-prop_toTitle :: Word8 -> Bool
-prop_toTitle w
-    | w == _mu = toTitle w == w
-    | w == _ydieresis = toTitle w == w
-    | otherwise = word8ToChar (toTitle w) == C.toTitle (word8ToChar w)
+            (word8ToChar . toTitle <$> allWord8)
+                == (latin1Model C.toTitle . word8ToChar <$> allWord8)
 
 ----------------------------------------------------------------
 
 word8ToChar :: Word8 -> Char
 word8ToChar = C.chr . fromIntegral
+
+-- Characters mapped outside Latin-1 by Data.Char must remain unchanged.
+latin1Model :: (Char -> Char) -> Char -> Char
+latin1Model f c = let c' = f c in if C.isLatin1 c' then c' else c

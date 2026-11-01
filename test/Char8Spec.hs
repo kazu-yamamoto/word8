@@ -111,31 +111,19 @@ spec = do
 
     describe "toUpper" $ do
         it "behaves like model" $
-            all prop_toUpper allChar8
+            (toUpper <$> allChar8)
+                == (latin1Model C.toUpper <$> allChar8)
 
     describe "toLower" $ do
         it "behaves like model" $
             (toLower <$> allChar8)
-                == (C.toLower <$> allChar8)
+                == (latin1Model C.toLower <$> allChar8)
 
     describe "toTitle" $ do
         it "behaves like model" $
-            all prop_toTitle allChar8
+            (toTitle <$> allChar8)
+                == (latin1Model C.toTitle <$> allChar8)
 
-prop_toUpper :: Char -> Bool
-prop_toUpper c
-    | c == _mu = toUpper c == c
-    | c == _ydieresis = toUpper c == c
-    | otherwise = toUpper c == C.toUpper c
-
-prop_toTitle :: Char -> Bool
-prop_toTitle c
-    | c == _mu = toTitle c == c
-    | c == _ydieresis = toTitle c == c
-    | otherwise = toTitle c == C.toTitle c
-
-----------------------------------------------------------------
-
-_mu, _ydieresis :: Char
-_mu = '\xb5'
-_ydieresis = '\xff'
+-- Characters mapped outside Latin-1 by Data.Char must remain unchanged.
+latin1Model :: (Char -> Char) -> Char -> Char
+latin1Model f c = let c' = f c in if C.isLatin1 c' then c' else c
