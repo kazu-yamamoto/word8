@@ -1,15 +1,7 @@
-{-# LANGUAGE CPP #-}
-
 -- | Word8 library to be used with "Data.ByteString".
 -- All functions assume that the 'Word8' is encoded in Latin-1 (ISO-8859-1).
 -- All utility functions are supposed to work like those of "Data.Char".
 -- Exceptions are described in the function documentations.
---
--- Base library 4.7 (GHC 7.8) or earlier is based on Unicode 6.
---
--- Base library 4.8 (GHC 7.10) or later is based on Unicode 7.
---
--- 'isLower', 'isSymbol' and 'isPunctuation' behave differently.
 module Data.Word8 (
     -- * Re-exporting
     Word8,
@@ -178,10 +170,6 @@ module Data.Word8 (
 import Data.Bits ((.&.))
 import Data.Word (Word8)
 
-#ifndef MIN_VERSION_base
-#define MIN_VERSION_base(x,y,z) 1
-#endif
-
 ----------------------------------------------------------------
 
 -- | Is the byte a control character
@@ -203,17 +191,11 @@ isSpace w =
 
 -- | Is the byte a lower case character
 --
--- This function returns 'True' for 170 (@'ª'@) and 186 (@'º'@) in Unicode 6.
--- But it returns 'False' in Unicode 7.
+-- This function returns 'False' for 170 (ª) and 186 (º).
 isLower :: Word8 -> Bool
 isLower w =
     isLower' w
         || w == _mu
-#if !MIN_VERSION_base(4,8,0)
-        || w == _ordfeminine
-        || w == _ordmasculine
-
-#endif
 
 isLowerCommon :: Word8 -> Bool
 isLowerCommon w =
@@ -255,11 +237,11 @@ isPrint w =
 isDigit :: Word8 -> Bool
 isDigit w = _0 <= w && w <= _9
 
--- | Is the byte an octet digit (@0-7@)
+-- | Is the byte an octal digit (@0-7@)
 isOctDigit :: Word8 -> Bool
 isOctDigit w = _0 <= w && w <= _7
 
--- | Is the byte a hexidecimal digit (@0-9a-zA-Z@)
+-- | Is the byte a hexadecimal digit (@0-9a-fA-F@)
 isHexDigit :: Word8 -> Bool
 isHexDigit w =
     isDigit w
@@ -272,7 +254,7 @@ isHexDigit w =
 isLetter :: Word8 -> Bool
 isLetter w = isLowerCommon w || isUpper w
 
--- | An byte is never a mark
+-- | A byte is never a mark
 --
 -- Synonymous with @const False@
 isMark :: Word8 -> Bool
@@ -291,8 +273,7 @@ isNumber w =
 
 -- | Is the byte a punctuation character
 --
--- This function returns 'False' for 167 (@'§'@) and 182 (@'¶'@) in Unicode 6.
--- But it returns 'True' in Unicode 7.
+-- This function returns 'True' for 167 (§) and 182 (¶).
 isPunctuation :: Word8 -> Bool
 isPunctuation w =
     w
@@ -320,10 +301,8 @@ isPunctuation w =
                , 0x7b
                , 0x7d
                , 0xa1
-#if MIN_VERSION_base(4,8,0)
                , 0xa7
                , 0xb6
-#endif
                , 0xab
                , 0xb7
                , 0xbb
@@ -332,8 +311,7 @@ isPunctuation w =
 
 -- | Is the byte a symbol character
 --
--- This function returns 'True' for 167 (@'§'@) and 182 (@'¶'@) in Unicode 6.
--- But it returns 'False' in Unicode 7.
+-- This function returns 'False' for 167 (§) and 182 (¶).
 isSymbol :: Word8 -> Bool
 isSymbol w =
     w
@@ -351,10 +329,6 @@ isSymbol w =
                , 0xa4
                , 0xa5
                , 0xa6
-#if !MIN_VERSION_base(4,8,0)
-               , 0xa7
-               , 0xb6
-#endif
                , 0xa8
                , 0xa9
                , 0xac
@@ -428,292 +402,6 @@ toTitle = toUpper
 -- > Char: '\NUL'
 _nul :: Word8
 _nul = 0x00
-
---- | Start of Heading
---
--- > BIN:  0b00000001
--- > OCT:  0o001
--- > DEC:  1
--- > HEX:  0x01
--- > HTML: &#01;
--- > Char: '\SOH'
--- _soh :: Word8
--- _soh = 0x01
-
---- | Start of Text
---
--- > BIN:  0b00000010
--- > OCT:  0o002
--- > DEC:  2
--- > HEX:  0x02
--- > HTML: &#02;
--- > Char: '\STX'
--- _stx :: Word8
--- _stx = 0x01
-
---- | End of Text
---
--- > BIN:  0b00000011
--- > OCT:  0o003
--- > DEC:  3
--- > HEX:  0x03
--- > HTML: &#03;
--- > Char: '\ETX'
--- _etx :: Word8
--- _etx = 0x03
-
---- | End of Transmission
---
--- > BIN:  0b00000100
--- > OCT:  0o004
--- > DEC:  4
--- > HEX:  0x04
--- > HTML: &#04;
--- > Char: '\EOT'
--- _eot :: Word8
--- _eot = 0x04
-
---- | Enquiry
---
--- > BIN:  0b00000101
--- > OCT:  0o005
--- > DEC:  5
--- > HEX:  0x05
--- > HTML: &#05;
--- > Char: '\ENQ'
--- _enq :: Word8
--- _enq = 0x05
-
---- | Acknowledge
---
--- > BIN:  0b00000110
--- > OCT:  0o006
--- > DEC:  6
--- > HEX:  0x06
--- > HTML: &#06;
--- > Char: '\ACK'
--- _ack :: Word8
--- _ack = 0x06
-
---- | Bell, Alert
---
--- > BIN:  0b00000111
--- > OCT:  0o007
--- > DEC:  7
--- > HEX:  0x07
--- > HTML: &#07;
--- > Char: '\BEL'
--- _bel :: Word8
--- _bel = 0x07
-
---- | Backspace
---
--- > BIN:  0b00001000
--- > OCT:  0o010
--- > DEC:  8
--- > HEX:  0x08
--- > HTML: &#08;
--- > Char: '\BS'
--- _bs :: Word8
--- _bs = 0x08
-
---- | Shift Out
---
--- > BIN:  0b00001110
--- > OCT:  0o016
--- > DEC:  14
--- > HEX:  0x0E
--- > HTML: &#14;
--- > Char: '\SO'
--- _so :: Word8
--- _so = 0x0E
-
---- | Shift In
---
--- > BIN:  0b00001111
--- > OCT:  0o017
--- > DEC:  15
--- > HEX:  0x0F
--- > HTML: &#15;
--- > Char: '\SI'
--- _si :: Word8
--- _si = 0x0F
-
---- | Data Link Escape
---
--- > BIN:  0b00010000
--- > OCT:  0o020
--- > DEC:  16
--- > HEX:  0x10
--- > HTML: &#16;
--- > Char: '\DLE'
--- _dle :: Word8
--- _dle = 0x10
-
---- | Device Control One (XON)
---
--- > BIN:  0b00010001
--- > OCT:  0o021
--- > DEC:  17
--- > HEX:  0x11
--- > HTML: &#17;
--- > Char: '\DC1'
--- _dc1 :: Word8
--- _dc1 = 0x11
-
---- | Device Control Two
---
--- > BIN:  0b00010010
--- > OCT:  0o022
--- > DEC:  18
--- > HEX:  0x12
--- > HTML: &#18;
--- > Char: '\DC2'
--- _dc2 :: Word8
--- _dc2 = 0x12
-
---- | Device Control Three (XOFF)
---
--- > BIN:  0b00010011
--- > OCT:  0o023
--- > DEC:  19
--- > HEX:  0x13
--- > HTML: &#19;
--- > Char: '\DC3'
--- _dc3 :: Word8
--- _dc3 = 0x13
-
---- | Device Control Four
---
--- > BIN:  0b00010100
--- > OCT:  0o024
--- > DEC:  20
--- > HEX:  0x14
--- > HTML: &#20;
--- > Char: '\DC4'
--- _dc4 :: Word8
--- _dc4 = 0x14
-
---- | Negative Acknowledge
---
--- > BIN:  0b00010101
--- > OCT:  0o025
--- > DEC:  21
--- > HEX:  0x15
--- > HTML: &#21;
--- > Char: '\NAK'
--- _nak :: Word8
--- _nak = 0x15
-
---- | Synchronous Idle
---
--- > BIN:  0b00010110
--- > OCT:  0o026
--- > DEC:  22
--- > HEX:  0x16
--- > HTML: &#22;
--- > Char: '\SYN'
--- _syn :: Word8
--- _syn = 0x16
-
---- | End of Transmission Block
---
--- > BIN:  0b00010111
--- > OCT:  0o027
--- > DEC:  23
--- > HEX:  0x17
--- > HTML: &#23;
--- > Char: '\ETB'
--- _etb :: Word8
--- _etb = 0x17
-
---- | Cancel
---
--- > BIN:  0b00011000
--- > OCT:  0o030
--- > DEC:  24
--- > HEX:  0x18
--- > HTML: &#24;
--- > Char: '\CAN'
--- _can :: Word8
--- _can = 0x18
-
---- | End of medium
---
--- > BIN:  0b00011001
--- > OCT:  0o031
--- > DEC:  25
--- > HEX:  0x19
--- > HTML: &#25;
--- > Char: '\EM'
--- _em :: Word8
--- _em = 0x19
-
---- | Substitute
---
--- > BIN:  0b00011010
--- > OCT:  0o032
--- > DEC:  26
--- > HEX:  0x1A
--- > HTML: &#26;
--- > Char: '\SUB'
--- _sub :: Word8
--- _sub = 0x1A
-
---- | Escape
---
--- > BIN:  0b00011011
--- > OCT:  0o033
--- > DEC:  27
--- > HEX:  0x1B
--- > HTML: &#27;
--- > Char: '\ESC'
--- _esc :: Word8
--- _esc = 0x1B
-
---- | File Separator
---
--- > BIN:  0b00011100
--- > OCT:  0o034
--- > DEC:  28
--- > HEX:  0x1C
--- > HTML: &#28;
--- > Char: '\FS'
--- _fs :: Word8
--- _fs = 0x1C
-
---- | Group Separator
---
--- > BIN:  0b00011101
--- > OCT:  0o035
--- > DEC:  29
--- > HEX:  0x1D
--- > HTML: &#29;
--- > Char: '\GS'
--- _gs :: Word8
--- _gs = 0x1D
-
---- | Record Separator
---
--- > BIN:  0b00011110
--- > OCT:  0o036
--- > DEC:  30
--- > HEX:  0x1E
--- > HTML: &#30;
--- > Char: '\RS'
--- _rs :: Word8
--- _rs = 0x1E
-
---- | Unit Separator
---
--- > BIN:  0b00011111
--- > OCT:  0o037
--- > DEC:  31
--- > HEX:  0x1F
--- > HTML: &#31;
--- > Char: '\US'
--- _us :: Word8
--- _us = 0x1F
 
 -- | Horizontal Tab
 --

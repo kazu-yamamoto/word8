@@ -1,17 +1,10 @@
-{-# LANGUAGE CPP #-}
 {-# LANGUAGE MagicHash #-}
 
 -- | Char8 library to be used with "Data.ByteString.Char8".
--- All functions assume that only the 8-bit part of 'Char'.
+-- All functions assume that 'Char' is in the Latin-1 range (ISO-8859-1).
 -- All utility functions are supposed to work like
 -- those of "Data.Char". Exceptions are described in
 -- the function documentations.
---
--- Base library 4.7 (GHC 7.8) or earlier is based on Unicode 6.
---
--- Base library 4.8 (GHC 7.10) or later is based on Unicode 7.
---
--- 'isLower', 'isSymbol' and 'isPunctuation' behave differently.
 module Data.Char8 (
     -- * Character classification
     isControl,
@@ -66,17 +59,11 @@ isSpace c =
 
 -- | Is it a lower case character
 --
--- This function returns 'True' for 170 (@'ª'@) and 186 (@'º'@) in Unicode 6.
--- But it returns 'False' in Unicode 7.
+-- This function returns 'False' for 170 (ª) and 186 (º).
 isLower :: Char -> Bool
 isLower c =
     isLower' c
         || c == _mu
-#if !MIN_VERSION_base(4,8,0)
-        || c == _ordfeminine
-        || c == _ordmasculine
-
-#endif
 
 isLowerCommon :: Char -> Bool
 isLowerCommon c =
@@ -118,11 +105,11 @@ isPrint c =
 isDigit :: Char -> Bool
 isDigit c = '0' <= c && c <= '9'
 
--- | Is the character an octet digit (@0-7@)
+-- | Is the character an octal digit (@0-7@)
 isOctDigit :: Char -> Bool
 isOctDigit c = '0' <= c && c <= '7'
 
--- | Is the character a hexidecimal digit (@0-9a-zA-Z@)
+-- | Is the character a hexadecimal digit (@0-9a-fA-F@)
 isHexDigit :: Char -> Bool
 isHexDigit c =
     isDigit c
@@ -154,8 +141,7 @@ isNumber c =
 
 -- | Is it a punctuation character
 --
--- This function returns 'False' for 167 (@'§'@) and 182 (@'¶'@) in Unicode 6.
--- But it returns 'True' in Unicode 7.
+-- This function returns 'True' for 167 (§) and 182 (¶).
 isPunctuation :: Char -> Bool
 isPunctuation c =
     c
@@ -182,10 +168,8 @@ isPunctuation c =
                , '\x5f'
                , '\x7b'
                , '\x7d'
-#if MIN_VERSION_base(4,8,0)
                , '\xa7'
                , '\xb6'
-#endif
                , '\xa1'
                , '\xab'
                , '\xb7'
@@ -195,8 +179,7 @@ isPunctuation c =
 
 -- | Is it a symbol character
 --
--- This function returns 'True' for 167 (@'§'@) and 182 (@'¶'@) in Unicode 6.
--- But it returns 'False' in Unicode 7.
+-- This function returns 'False' for 167 (§) and 182 (¶).
 isSymbol :: Char -> Bool
 isSymbol c =
     c
@@ -214,10 +197,6 @@ isSymbol c =
                , '\xa4'
                , '\xa5'
                , '\xa6'
-#if !MIN_VERSION_base(4,8,0)
-               , '\xa7'
-               , '\xb6'
-#endif
                , '\xa8'
                , '\xa9'
                , '\xac'
@@ -241,19 +220,11 @@ isSeparator c =
 
 -- | Is the character in the ASCII range
 isAscii :: Char -> Bool
-#if __GLASGOW_HASKELL__ >= 707
-isAscii (C# c#) = isTrue# (ord# c# <=# 0x7f#)
-#else
-isAscii (C# c#) = ord# c# <=# 0x7f#
-#endif
+isAscii c = c <= '\x7f'
 
 -- | Is the character in the Latin-1 range
 isLatin1 :: Char -> Bool
-#if __GLASGOW_HASKELL__ >= 707
-isLatin1 (C# c#) = isTrue# (ord# c# <=# 0xff#)
-#else
-isLatin1 (C# c#) = ord# c# <=# 0xff#
-#endif
+isLatin1 c = c <= '\xff'
 
 -- | Is the character an upper case ASCII letter (@A-Z@)
 isAsciiUpper :: Char -> Bool
@@ -267,7 +238,7 @@ isAsciiLower c = 'a' <= c && c <= 'z'
 
 -- | Changes the character to the upper case variant, if possible.
 --
--- Micro sign/mu ('_mu') and small letter Y with diaeresis ('_ydieresis') remain the same.
+-- Micro sign/mu (µ) and small letter Y with diaeresis (ÿ) remain the same.
 toUpper :: Char -> Char
 toUpper c@(C# c#)
     | c == _germandbls = c
