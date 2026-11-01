@@ -402,6 +402,7 @@ isAsciiLower w = _a <= w && w <= _z
 toUpper :: Word8 -> Word8
 toUpper w
     | w == _germandbls = w
+    | w == _ydieresis = w
     | isLower' w = w - _space
     | otherwise = w
 

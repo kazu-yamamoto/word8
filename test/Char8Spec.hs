@@ -1,14 +1,8 @@
-{-# LANGUAGE DerivingStrategies #-}
-{-# LANGUAGE GeneralisedNewtypeDeriving #-}
-
 module Char8Spec where
 
 import qualified Data.Char as C
 import Data.Char8
-import Data.Word8 (Word8)
 import Test.Hspec
-import Test.Hspec.QuickCheck
-import Test.QuickCheck (Arbitrary (..), withMaxSuccess)
 
 allChar8 :: String
 allChar8 = ['\0' .. '\255']
@@ -116,8 +110,8 @@ spec = do
                 == (C.isAsciiLower <$> allChar8)
 
     describe "toUpper" $ do
-        prop "behaves like model" $
-            withMaxSuccess 10000 prop_toUpper
+        it "behaves like model" $
+            all prop_toUpper allChar8
 
     describe "toLower" $ do
         it "behaves like model" $
@@ -125,19 +119,19 @@ spec = do
                 == (C.toLower <$> allChar8)
 
     describe "toTitle" $ do
-        prop "behaves like model" $
-            withMaxSuccess 10000 prop_toTitle
+        it "behaves like model" $
+            all prop_toTitle allChar8
 
-prop_toUpper :: Char8 -> Bool
-prop_toUpper (Char8 c)
-    | c == _mu = True
-    | c == _ydieresis = True
+prop_toUpper :: Char -> Bool
+prop_toUpper c
+    | c == _mu = toUpper c == c
+    | c == _ydieresis = toUpper c == c
     | otherwise = toUpper c == C.toUpper c
 
-prop_toTitle :: Char8 -> Bool
-prop_toTitle (Char8 c)
-    | c == _mu = True
-    | c == _ydieresis = True
+prop_toTitle :: Char -> Bool
+prop_toTitle c
+    | c == _mu = toTitle c == c
+    | c == _ydieresis = toTitle c == c
     | otherwise = toTitle c == C.toTitle c
 
 ----------------------------------------------------------------
@@ -145,11 +139,3 @@ prop_toTitle (Char8 c)
 _mu, _ydieresis :: Char
 _mu = '\xb5'
 _ydieresis = '\xff'
-
-newtype Char8 = Char8 Char
-    deriving newtype (Eq, Show)
-
-instance Arbitrary Char8 where
-    arbitrary = do
-        w8 <- arbitrary
-        pure $ Char8 $ C.chr $ fromIntegral (w8 :: Word8)

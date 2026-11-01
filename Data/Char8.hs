@@ -271,6 +271,7 @@ isAsciiLower c = 'a' <= c && c <= 'z'
 toUpper :: Char -> Char
 toUpper c@(C# c#)
     | c == _germandbls = c
+    | c == _ydieresis = c
     | isLower' c = C# (chr# (ord# c# -# 32#))
     | otherwise = c
 

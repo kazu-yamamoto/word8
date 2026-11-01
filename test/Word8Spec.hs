@@ -3,8 +3,6 @@ module Word8Spec where
 import qualified Data.Char as C
 import Data.Word8
 import Test.Hspec
-import Test.Hspec.QuickCheck
-import Test.QuickCheck (withMaxSuccess)
 
 allWord8 :: [Word8]
 allWord8 = [0 .. 255]
@@ -112,8 +110,8 @@ spec = do
                 == (C.isAsciiLower . word8ToChar <$> allWord8)
 
     describe "toUpper" $ do
-        prop "behaves like model" $
-            withMaxSuccess 10000 prop_toUpper
+        it "behaves like model" $
+            all prop_toUpper allWord8
 
     describe "toLower" $ do
         it "behaves like model" $
@@ -121,19 +119,19 @@ spec = do
                 == (C.toLower . word8ToChar <$> allWord8)
 
     describe "toTitle" $ do
-        prop "behaves like model" $
-            withMaxSuccess 10000 prop_toTitle
+        it "behaves like model" $
+            all prop_toTitle allWord8
 
 prop_toUpper :: Word8 -> Bool
 prop_toUpper w
-    | w == _mu = True
-    | w == _ydieresis = True
+    | w == _mu = toUpper w == w
+    | w == _ydieresis = toUpper w == w
     | otherwise = word8ToChar (toUpper w) == C.toUpper (word8ToChar w)
 
 prop_toTitle :: Word8 -> Bool
 prop_toTitle w
-    | w == _mu = True
-    | w == _ydieresis = True
+    | w == _mu = toTitle w == w
+    | w == _ydieresis = toTitle w == w
     | otherwise = word8ToChar (toTitle w) == C.toTitle (word8ToChar w)
 
 ----------------------------------------------------------------

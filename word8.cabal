@@ -29,7 +29,6 @@ Test-Suite spec
   Build-Depends:        base
                       , word8
                       , hspec
-                      , QuickCheck
 
 Benchmark criterion
   Type:                 exitcode-stdio-1.0
