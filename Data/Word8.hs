@@ -167,8 +167,8 @@ module Data.Word8 (
     _ydieresis,
 ) where
 
-import Data.Bits ((.&.))
-import Data.Word (Word8)
+import Data.Bits (unsafeShiftR, (.&.))
+import Data.Word (Word64, Word8)
 
 ----------------------------------------------------------------
 
@@ -275,72 +275,35 @@ isNumber w =
 --
 -- This function returns 'True' for 167 (§) and 182 (¶).
 isPunctuation :: Word8 -> Bool
+-- Bitmap of !"#%&'()*,-./:;?@[\]_{} and ¡§«¶·»¿
+{-# INLINE isPunctuation #-}
 isPunctuation w =
-    w
-        `elem` [ 0x21
-               , 0x22
-               , 0x23
-               , 0x25
-               , 0x26
-               , 0x27
-               , 0x28
-               , 0x29
-               , 0x2a
-               , 0x2c
-               , 0x2d
-               , 0x2e
-               , 0x2f
-               , 0x3a
-               , 0x3b
-               , 0x3f
-               , 0x40
-               , 0x5b
-               , 0x5c
-               , 0x5d
-               , 0x5f
-               , 0x7b
-               , 0x7d
-               , 0xa1
-               , 0xa7
-               , 0xb6
-               , 0xab
-               , 0xb7
-               , 0xbb
-               , 0xbf
-               ]
+    inBitmap 0x8c00f7ee00000000 0x28000000b8000001 0x88c0088200000000 0 w
 
 -- | Is the byte a symbol character
 --
 -- This function returns 'False' for 167 (§) and 182 (¶).
 isSymbol :: Word8 -> Bool
+-- Bitmap of $+<=>^`|~ and ¢£¤¥¦¨©¬®¯°±´¸×÷
+{-# INLINE isSymbol #-}
 isSymbol w =
-    w
-        `elem` [ 0x24
-               , 0x2b
-               , 0x3c
-               , 0x3d
-               , 0x3e
-               , 0x5e
-               , 0x60
-               , 0x7c
-               , 0x7e
-               , 0xa2
-               , 0xa3
-               , 0xa4
-               , 0xa5
-               , 0xa6
-               , 0xa8
-               , 0xa9
-               , 0xac
-               , 0xae
-               , 0xaf
-               , 0xb0
-               , 0xb1
-               , 0xb4
-               , 0xb8
-               , 0xd7
-               , 0xf7
-               ]
+    inBitmap
+        0x7000081000000000
+        0x5000000140000000
+        0x0113d37c00000000
+        0x0080000000800000
+        w
+
+-- Membership test for a 256-bit set given as four 64-bit words.
+inBitmap :: Word64 -> Word64 -> Word64 -> Word64 -> Word8 -> Bool
+inBitmap b0 b1 b2 b3 w = (b `unsafeShiftR` fromIntegral (w .&. 63)) .&. 1 /= 0
+  where
+    b = case w `unsafeShiftR` 6 of
+        0 -> b0
+        1 -> b1
+        2 -> b2
+        _ -> b3
+{-# INLINE inBitmap #-}
 
 -- | Is the byte a (non-breaking) space
 isSeparator :: Word8 -> Bool

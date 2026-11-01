@@ -38,6 +38,8 @@ module Data.Char8 (
 
 import GHC.Base
 
+import qualified Data.Word8 as W
+
 ----------------------------------------------------------------
 
 -- | Is it a control character
@@ -143,72 +145,13 @@ isNumber c =
 --
 -- This function returns 'True' for 167 (§) and 182 (¶).
 isPunctuation :: Char -> Bool
-isPunctuation c =
-    c
-        `elem` [ '\x21'
-               , '\x22'
-               , '\x23'
-               , '\x25'
-               , '\x26'
-               , '\x27'
-               , '\x28'
-               , '\x29'
-               , '\x2a'
-               , '\x2c'
-               , '\x2d'
-               , '\x2e'
-               , '\x2f'
-               , '\x3a'
-               , '\x3b'
-               , '\x3f'
-               , '\x40'
-               , '\x5b'
-               , '\x5c'
-               , '\x5d'
-               , '\x5f'
-               , '\x7b'
-               , '\x7d'
-               , '\xa7'
-               , '\xb6'
-               , '\xa1'
-               , '\xab'
-               , '\xb7'
-               , '\xbb'
-               , '\xbf'
-               ]
+isPunctuation c = isLatin1 c && W.isPunctuation (fromIntegral (ord c))
 
 -- | Is it a symbol character
 --
 -- This function returns 'False' for 167 (§) and 182 (¶).
 isSymbol :: Char -> Bool
-isSymbol c =
-    c
-        `elem` [ '\x24'
-               , '\x2b'
-               , '\x3c'
-               , '\x3d'
-               , '\x3e'
-               , '\x5e'
-               , '\x60'
-               , '\x7c'
-               , '\x7e'
-               , '\xa2'
-               , '\xa3'
-               , '\xa4'
-               , '\xa5'
-               , '\xa6'
-               , '\xa8'
-               , '\xa9'
-               , '\xac'
-               , '\xae'
-               , '\xaf'
-               , '\xb0'
-               , '\xb1'
-               , '\xb4'
-               , '\xb8'
-               , '\xd7'
-               , '\xf7'
-               ]
+isSymbol c = isLatin1 c && W.isSymbol (fromIntegral (ord c))
 
 -- | Is it a (non-breaking) space
 isSeparator :: Char -> Bool
